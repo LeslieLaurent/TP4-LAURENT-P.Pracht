@@ -10,7 +10,7 @@ import Layout from "../layouts/Layout.astro";
 
       <p
         class="mb-4 text-sm font-bold uppercase
-               tracking-[0.2em] text-[#d06a80]"
+               tracking-[0.2em] text-[#ff9bb2]"
       >
         Astro × Observable Plot
       </p>
@@ -18,18 +18,19 @@ import Layout from "../layouts/Layout.astro";
       <h1
         class="max-w-5xl text-6xl font-bold
                leading-[0.95] tracking-tight
+               text-[#fff8f5]
                md:text-8xl"
       >
         Graphiques
 
-        <span class="block text-[#d06a80]">
+        <span class="block text-[#ff9bb2]">
           côté client.
         </span>
       </h1>
 
       <p
         class="mt-7 max-w-2xl text-lg
-               leading-8 text-[#c2aeb3]"
+               leading-8 text-[#e6d6da]"
       >
         Plusieurs essais permettent de comprendre
         comment générer et mettre à jour un graphique
@@ -45,200 +46,205 @@ import Layout from "../layouts/Layout.astro";
 
         <a
           href="/simple/"
-          class="flex min-h-80 flex-col justify-between
-                 rounded-3xl border border-[#4b2936]
+          class="flex min-h-64 flex-col
+                 rounded-3xl border-2 border-[#704052]
                  bg-[#21131b] p-8
                  transition hover:-translate-y-1
-                 hover:border-[#d06a80]
-                 focus-visible:outline
-                 focus-visible:outline-4
-                 focus-visible:outline-offset-4
-                 focus-visible:outline-[#d06a80]"
+                 hover:border-[#ff9bb2]"
         >
 
-          <span class="font-bold text-[#d06a80]">
+          <span
+            class="mb-14 font-bold
+                   text-[#ff9bb2]"
+          >
             01
           </span>
 
-          <div>
+          <p
+            class="text-sm font-bold uppercase
+                   tracking-[0.15em] text-[#ffd0db]"
+          >
+            Premier essai
+          </p>
 
-            <p
-              class="text-sm font-bold uppercase
-                     tracking-[0.15em] text-[#a98b96]"
-            >
-              Premier essai
-            </p>
+          <h2
+            class="mt-3 text-3xl font-bold
+                   text-[#fff8f5]"
+          >
+            Simple
+          </h2>
 
-            <h2 class="mt-3 text-4xl font-bold">
-              Simple
-            </h2>
-
-            <p class="mt-4 text-[#c2aeb3]">
-              Premier graphique Observable Plot
-              généré en JavaScript côté client.
-            </p>
-
-          </div>
+          <p
+            class="mt-4 leading-7
+                   text-[#e6d6da]"
+          >
+            Premier graphique Observable Plot
+            généré en JavaScript côté client.
+          </p>
 
         </a>
 
 
         <a
           href="/simple-penguin/"
-          class="flex min-h-80 flex-col justify-between
-                 rounded-3xl border border-[#4b2936]
+          class="flex min-h-64 flex-col
+                 rounded-3xl border-2 border-[#704052]
                  bg-[#21131b] p-8
                  transition hover:-translate-y-1
-                 hover:border-[#d06a80]
-                 focus-visible:outline
-                 focus-visible:outline-4
-                 focus-visible:outline-offset-4
-                 focus-visible:outline-[#d06a80]"
+                 hover:border-[#ff9bb2]"
         >
 
-          <span class="font-bold text-[#d06a80]">
+          <span
+            class="mb-14 font-bold
+                   text-[#ff9bb2]"
+          >
             02
           </span>
 
-          <div>
+          <p
+            class="text-sm font-bold uppercase
+                   tracking-[0.15em] text-[#ffd0db]"
+          >
+            Dataset JSON
+          </p>
 
-            <p
-              class="text-sm font-bold uppercase
-                     tracking-[0.15em] text-[#a98b96]"
-            >
-              Dataset JSON
-            </p>
+          <h2
+            class="mt-3 text-3xl font-bold
+                   text-[#fff8f5]"
+          >
+            Simple Penguin
+          </h2>
 
-            <h2 class="mt-3 text-4xl font-bold">
-              Simple Penguin
-            </h2>
-
-            <p class="mt-4 text-[#c2aeb3]">
-              Affichage du dataset Penguins
-              sans filtre.
-            </p>
-
-          </div>
+          <p
+            class="mt-4 leading-7
+                   text-[#e6d6da]"
+          >
+            Affichage du dataset Penguins
+            sans filtre.
+          </p>
 
         </a>
 
 
         <a
           href="/penguin-filtre/"
-          class="flex min-h-80 flex-col justify-between
-                 rounded-3xl border border-[#4b2936]
+          class="flex min-h-64 flex-col
+                 rounded-3xl border-2 border-[#704052]
                  bg-[#21131b] p-8
                  transition hover:-translate-y-1
-                 hover:border-[#d06a80]
-                 focus-visible:outline
-                 focus-visible:outline-4
-                 focus-visible:outline-offset-4
-                 focus-visible:outline-[#d06a80]"
+                 hover:border-[#ff9bb2]"
         >
 
-          <span class="font-bold text-[#d06a80]">
+          <span
+            class="mb-14 font-bold
+                   text-[#ff9bb2]"
+          >
             03
           </span>
 
-          <div>
+          <p
+            class="text-sm font-bold uppercase
+                   tracking-[0.15em] text-[#ffd0db]"
+          >
+            Un filtre
+          </p>
 
-            <p
-              class="text-sm font-bold uppercase
-                     tracking-[0.15em] text-[#a98b96]"
-            >
-              Un filtre
-            </p>
+          <h2
+            class="mt-3 text-3xl font-bold
+                   text-[#fff8f5]"
+          >
+            Penguin avec filtre
+          </h2>
 
-            <h2 class="mt-3 text-4xl font-bold">
-              Penguin avec filtre
-            </h2>
-
-            <p class="mt-4 text-[#c2aeb3]">
-              Le select Species pilote
-              directement le graphique.
-            </p>
-
-          </div>
+          <p
+            class="mt-4 leading-7
+                   text-[#e6d6da]"
+          >
+            Le select Species pilote
+            directement le graphique.
+          </p>
 
         </a>
 
 
         <a
           href="/penguin-filtres/"
-          class="flex min-h-80 flex-col justify-between
-                 rounded-3xl border border-[#4b2936]
+          class="flex min-h-64 flex-col
+                 rounded-3xl border-2 border-[#704052]
                  bg-[#21131b] p-8
                  transition hover:-translate-y-1
-                 hover:border-[#d06a80]
-                 focus-visible:outline
-                 focus-visible:outline-4
-                 focus-visible:outline-offset-4
-                 focus-visible:outline-[#d06a80]"
+                 hover:border-[#ff9bb2]"
         >
 
-          <span class="font-bold text-[#d06a80]">
+          <span
+            class="mb-14 font-bold
+                   text-[#ff9bb2]"
+          >
             04
           </span>
 
-          <div>
+          <p
+            class="text-sm font-bold uppercase
+                   tracking-[0.15em] text-[#ffd0db]"
+          >
+            Plusieurs filtres
+          </p>
 
-            <p
-              class="text-sm font-bold uppercase
-                     tracking-[0.15em] text-[#a98b96]"
-            >
-              Plusieurs filtres
-            </p>
+          <h2
+            class="mt-3 text-3xl font-bold
+                   text-[#fff8f5]"
+          >
+            Penguins avancé
+          </h2>
 
-            <h2 class="mt-3 text-4xl font-bold">
-              Penguins avancé
-            </h2>
-
-            <p class="mt-4 text-[#c2aeb3]">
-              Species, island et sex
-              sont combinés.
-            </p>
-
-          </div>
+          <p
+            class="mt-4 leading-7
+                   text-[#e6d6da]"
+          >
+            Species, island et sex sont combinés
+            pour mettre à jour le graphique.
+          </p>
 
         </a>
 
 
         <a
           href="/cars-filtre/"
-          class="flex min-h-80 flex-col justify-between
-                 rounded-3xl border border-[#32495a]
-                 bg-[#111b23] p-8
+          class="flex min-h-64 flex-col
+                 rounded-3xl border-2 border-[#355d73]
+                 bg-[#15232c] p-8
                  transition hover:-translate-y-1
-                 hover:border-[#72a7cf]
-                 focus-visible:outline
-                 focus-visible:outline-4
-                 focus-visible:outline-offset-4
-                 focus-visible:outline-[#72a7cf]"
+                 hover:border-[#8fd3ff]"
         >
 
-          <span class="font-bold text-[#72a7cf]">
+          <span
+            class="mb-14 font-bold
+                   text-[#8fd3ff]"
+          >
             05
           </span>
 
-          <div>
+          <p
+            class="text-sm font-bold uppercase
+                   tracking-[0.15em] text-[#b9e4ff]"
+          >
+            Autre dataset
+          </p>
 
-            <p
-              class="text-sm font-bold uppercase
-                     tracking-[0.15em] text-[#9fc3dd]"
-            >
-              Autre dataset
-            </p>
+          <h2
+            class="mt-3 text-3xl font-bold
+                   text-[#fff8f5]"
+          >
+            Cars
+          </h2>
 
-            <h2 class="mt-3 text-4xl font-bold">
-              Cars
-            </h2>
-
-            <p class="mt-4 text-[#b8cbd8]">
-              La même méthode est appliquée
-              à un autre jeu de données.
-            </p>
-
-          </div>
+          <p
+            class="mt-4 leading-7
+                   text-[#e6d6da]"
+          >
+            La même méthode est appliquée
+            à un autre jeu de données.
+          </p>
 
         </a>
 
