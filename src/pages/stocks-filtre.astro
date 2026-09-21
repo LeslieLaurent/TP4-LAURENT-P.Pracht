@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Stocks avec filtre - Observable Plot">
+<Layout title="Stocks avec filtre — Observable Plot">
 
   <main class="mx-auto max-w-7xl px-6 py-12 lg:px-12 lg:py-16">
 
@@ -124,7 +124,6 @@ import Layout from "../layouts/Layout.astro";
                    text-[#7ee0c3]"
             aria-live="polite"
           >
-            ...
           </p>
 
         </div>
@@ -193,6 +192,7 @@ import Layout from "../layouts/Layout.astro";
 
   <script>
     import * as Plot from "@observablehq/plot";
+    import stocksCsv from "../assets/stocks.csv?raw";
 
     const selectSymbol =
       document.querySelector<HTMLSelectElement>(
@@ -209,12 +209,40 @@ import Layout from "../layouts/Layout.astro";
         "#result-count"
       );
 
-    let stocks: {
-      symbol: string;
-      date: Date;
-      price: number;
-    }[] = [];
+    const lines =
+      stocksCsv
+        .trim()
+        .split(/\r?\n/);
 
+    const stocks =
+      lines
+        .slice(1)
+        .map((line) => {
+
+          const [
+            symbol,
+            date,
+            price
+          ] =
+            line.split(",");
+
+          return {
+            symbol: symbol.trim(),
+            date: new Date(date.trim()),
+            price: Number(price.trim())
+          };
+
+        })
+        .filter(
+          (stock) =>
+            stock.symbol &&
+            !Number.isNaN(
+              stock.date.getTime()
+            ) &&
+            Number.isFinite(
+              stock.price
+            )
+        );
 
     function renderPlot() {
 
@@ -225,10 +253,8 @@ import Layout from "../layouts/Layout.astro";
         return;
       }
 
-
       const symbol =
         selectSymbol.value;
-
 
       const filteredStocks =
         stocks.filter(
@@ -237,15 +263,12 @@ import Layout from "../layouts/Layout.astro";
             stock.symbol === symbol
         );
 
-
       if (resultCount) {
         resultCount.innerText =
           filteredStocks.length.toString();
       }
 
-
       div.innerHTML = "";
-
 
       const width =
         Math.max(
@@ -255,7 +278,6 @@ import Layout from "../layouts/Layout.astro";
             div.clientWidth
           )
         );
-
 
       const plot =
         Plot.plot({
@@ -313,10 +335,8 @@ import Layout from "../layouts/Layout.astro";
               stocks,
               {
                 filter: (stock) =>
-                  (
-                    symbol === "" ||
-                    stock.symbol === symbol
-                  ),
+                  symbol === "" ||
+                  stock.symbol === symbol,
 
                 x: "date",
 
@@ -335,109 +355,15 @@ import Layout from "../layouts/Layout.astro";
 
         });
 
-
       div.append(plot);
-
     }
-
-
-    async function loadStocks() {
-
-      if (!resultCount) {
-        return;
-      }
-
-
-      try {
-
-        const response =
-          await fetch(
-            "https://vega.github.io/vega-datasets/data/stocks.csv"
-          );
-
-
-        if (!response.ok) {
-          throw new Error(
-            "Impossible de charger les données."
-          );
-        }
-
-
-        const csv =
-          await response.text();
-
-
-        const lines =
-          csv
-            .trim()
-            .split(/\r?\n/);
-
-
-        stocks =
-          lines
-            .slice(1)
-            .map((line) => {
-
-              const [
-                symbol,
-                date,
-                price
-              ] =
-                line.split(",");
-
-
-              return {
-                symbol:
-                  symbol.trim(),
-
-                date:
-                  new Date(
-                    date.trim()
-                  ),
-
-                price:
-                  Number(
-                    price.trim()
-                  )
-              };
-
-            })
-            .filter(
-              (stock) =>
-                stock.symbol &&
-                !Number.isNaN(
-                  stock.date.getTime()
-                ) &&
-                Number.isFinite(
-                  stock.price
-                )
-            );
-
-
-        renderPlot();
-
-      }
-
-      catch (error) {
-
-        resultCount.innerText =
-          "Erreur";
-
-
-        console.error(error);
-
-      }
-
-    }
-
 
     selectSymbol?.addEventListener(
       "change",
       renderPlot
     );
 
-
-    loadStocks();
+    renderPlot();
   </script>
 
 </Layout>
