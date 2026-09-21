@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Cars avec filtre — Observable Plot">
+<Layout title="Cars avec plusieurs filtres — Observable Plot">
 
   <main class="mx-auto max-w-7xl px-6 py-12 lg:px-12 lg:py-16">
 
@@ -21,7 +21,7 @@ import Layout from "../layouts/Layout.astro";
         class="mb-4 text-xs font-bold uppercase
                tracking-[0.22em] text-[#8fd3ff]"
       >
-        Essai 05 — Autre dataset
+        Essai 05 — Plusieurs filtres
       </p>
 
       <h1
@@ -40,10 +40,12 @@ import Layout from "../layouts/Layout.astro";
       >
         Explore la relation entre la puissance
         et la consommation des voitures selon
-        leur origine.
+        leur origine, leur nombre de cylindres
+        et leur période de production.
       </p>
 
     </header>
+
 
     <section
       class="border-y border-[#3d4f5b]
@@ -52,11 +54,12 @@ import Layout from "../layouts/Layout.astro";
 
       <div
         class="grid gap-6
-               md:grid-cols-[1fr_auto]
-               md:items-end"
+               md:grid-cols-2
+               lg:grid-cols-[1fr_1fr_1fr_auto]
+               lg:items-end"
       >
 
-        <div class="max-w-md">
+        <div>
 
           <label
             for="origin"
@@ -98,9 +101,104 @@ import Layout from "../layouts/Layout.astro";
 
         </div>
 
+
+        <div>
+
+          <label
+            for="cylinders"
+            class="mb-2 block
+                   text-xs font-bold uppercase
+                   tracking-[0.15em]
+                   text-[#c4d6e2]"
+          >
+            Cylindres
+          </label>
+
+          <select
+            id="cylinders"
+            class="w-full rounded-lg
+                   border border-[#52758a]
+                   bg-[#14212a]
+                   px-4 py-3
+                   text-[#fff8f5]
+                   transition
+                   hover:border-[#8fd3ff]
+                   focus:border-[#8fd3ff]"
+          >
+            <option value="">
+              Tous les cylindres
+            </option>
+
+            <option value="3">
+              3 cylindres
+            </option>
+
+            <option value="4">
+              4 cylindres
+            </option>
+
+            <option value="5">
+              5 cylindres
+            </option>
+
+            <option value="6">
+              6 cylindres
+            </option>
+
+            <option value="8">
+              8 cylindres
+            </option>
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label
+            for="period"
+            class="mb-2 block
+                   text-xs font-bold uppercase
+                   tracking-[0.15em]
+                   text-[#c4d6e2]"
+          >
+            Période
+          </label>
+
+          <select
+            id="period"
+            class="w-full rounded-lg
+                   border border-[#52758a]
+                   bg-[#14212a]
+                   px-4 py-3
+                   text-[#fff8f5]
+                   transition
+                   hover:border-[#8fd3ff]
+                   focus:border-[#8fd3ff]"
+          >
+            <option value="">
+              Toutes les périodes
+            </option>
+
+            <option value="1970-1974">
+              1970 — 1974
+            </option>
+
+            <option value="1975-1979">
+              1975 — 1979
+            </option>
+
+            <option value="1980-1982">
+              1980 — 1982
+            </option>
+          </select>
+
+        </div>
+
+
         <div
           class="border-l-0 border-[#3d4f5b]
-                 md:border-l md:pl-8"
+                 lg:border-l lg:pl-8"
         >
 
           <p
@@ -124,6 +222,7 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
     </section>
+
 
     <section class="pt-12">
 
@@ -163,6 +262,7 @@ import Layout from "../layouts/Layout.astro";
 
       </div>
 
+
       <div
         class="overflow-hidden
                rounded-xl
@@ -183,6 +283,7 @@ import Layout from "../layouts/Layout.astro";
 
   </main>
 
+
   <script>
     import * as Plot from "@observablehq/plot";
     import cars from "../assets/cars.json";
@@ -190,6 +291,16 @@ import Layout from "../layouts/Layout.astro";
     const selectOrigin =
       document.querySelector<HTMLSelectElement>(
         "#origin"
+      );
+
+    const selectCylinders =
+      document.querySelector<HTMLSelectElement>(
+        "#cylinders"
+      );
+
+    const selectPeriod =
+      document.querySelector<HTMLSelectElement>(
+        "#period"
       );
 
     const div =
@@ -202,35 +313,109 @@ import Layout from "../layouts/Layout.astro";
         "#result-count"
       );
 
+
+    function getYear(car: any) {
+
+      const date =
+        new Date(car.Year);
+
+      return date.getFullYear();
+
+    }
+
+
+    function matchesPeriod(
+      year: number,
+      period: string
+    ) {
+
+      if (period === "") {
+        return true;
+      }
+
+      if (period === "1970-1974") {
+        return year >= 1970 && year <= 1974;
+      }
+
+      if (period === "1975-1979") {
+        return year >= 1975 && year <= 1979;
+      }
+
+      if (period === "1980-1982") {
+        return year >= 1980 && year <= 1982;
+      }
+
+      return true;
+
+    }
+
+
     function renderPlot() {
 
       if (
         !selectOrigin ||
+        !selectCylinders ||
+        !selectPeriod ||
         !div
       ) {
         return;
       }
 
+
       const origin =
         selectOrigin.value;
 
+      const cylinders =
+        selectCylinders.value;
+
+      const period =
+        selectPeriod.value;
+
+
       const filteredCars =
         cars.filter(
-          (car) =>
-            (
+          (car) => {
+
+            const year =
+              getYear(car);
+
+            const originMatches =
               origin === "" ||
-              car.Origin === origin
-            ) &&
-            car.Horsepower != null &&
-            car.Miles_per_Gallon != null
+              car.Origin === origin;
+
+            const cylindersMatches =
+              cylinders === "" ||
+              car.Cylinders === Number(cylinders);
+
+            const periodMatches =
+              matchesPeriod(
+                year,
+                period
+              );
+
+            const valuesExist =
+              car.Horsepower != null &&
+              car.Miles_per_Gallon != null;
+
+            return (
+              originMatches &&
+              cylindersMatches &&
+              periodMatches &&
+              valuesExist
+            );
+
+          }
         );
+
 
       if (resultCount) {
         resultCount.innerText =
           filteredCars.length.toString();
       }
 
+
       div.innerHTML = "";
+
 
       const width =
         Math.max(
@@ -240,6 +425,7 @@ import Layout from "../layouts/Layout.astro";
             div.clientWidth
           )
         );
+
 
       const plot =
         Plot.plot({
@@ -292,27 +478,49 @@ import Layout from "../layouts/Layout.astro";
             Plot.dot(
               cars,
               {
-                filter: (car) =>
-                  (
-                    origin === "" ||
-                    car.Origin === origin
-                  ) &&
-                  car.Horsepower != null &&
-                  car.Miles_per_Gallon != null,
+                filter: (car) => {
+
+                  const year =
+                    getYear(car);
+
+                  return (
+                    (
+                      origin === "" ||
+                      car.Origin === origin
+                    ) &&
+                    (
+                      cylinders === "" ||
+                      car.Cylinders === Number(cylinders)
+                    ) &&
+                    matchesPeriod(
+                      year,
+                      period
+                    ) &&
+                    car.Horsepower != null &&
+                    car.Miles_per_Gallon != null
+                  );
+
+                },
 
                 x: "Horsepower",
+
                 y: "Miles_per_Gallon",
 
                 fill: "Origin",
 
                 stroke: "#ffffff",
+
                 strokeWidth: 1.2,
 
                 r: 6,
+
                 opacity: 0.9,
 
                 title: (car) =>
-                  `${car.Name} · ${car.Origin}`
+                  `${car.Name}
+${car.Origin}
+${car.Cylinders} cylindres
+${getYear(car)}`
               }
             )
 
@@ -320,13 +528,27 @@ import Layout from "../layouts/Layout.astro";
 
         });
 
+
       div.append(plot);
+
     }
+
 
     selectOrigin?.addEventListener(
       "change",
       renderPlot
     );
+
+    selectCylinders?.addEventListener(
+      "change",
+      renderPlot
+    );
+
+    selectPeriod?.addEventListener(
+      "change",
+      renderPlot
+    );
+
 
     renderPlot();
   </script>
