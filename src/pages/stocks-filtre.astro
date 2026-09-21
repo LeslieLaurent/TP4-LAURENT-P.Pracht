@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Stocks avec filtre — Observable Plot">
+<Layout title="Stocks avec plusieurs filtres — Observable Plot">
 
   <main class="mx-auto max-w-7xl px-6 py-12 lg:px-12 lg:py-16">
 
@@ -21,7 +21,7 @@ import Layout from "../layouts/Layout.astro";
         class="mb-4 text-xs font-bold uppercase
                tracking-[0.22em] text-[#7ee0c3]"
       >
-        Essai 06 — Dataset supplémentaire
+        Essai 06 — Plusieurs filtres
       </p>
 
       <h1
@@ -38,11 +38,13 @@ import Layout from "../layouts/Layout.astro";
                text-lg leading-8
                text-[#e4d7db]"
       >
-        Explore l'évolution du cours des actions
-        selon l'entreprise sélectionnée.
+        Explore l'évolution des cours boursiers
+        selon l'entreprise, la période
+        et la fourchette de prix.
       </p>
 
     </header>
+
 
     <section
       class="border-y border-[#35584f]
@@ -51,11 +53,12 @@ import Layout from "../layouts/Layout.astro";
 
       <div
         class="grid gap-6
-               md:grid-cols-[1fr_auto]
-               md:items-end"
+               md:grid-cols-2
+               lg:grid-cols-[1fr_1fr_1fr_auto]
+               lg:items-end"
       >
 
-        <div class="max-w-md">
+        <div>
 
           <label
             for="symbol"
@@ -105,9 +108,96 @@ import Layout from "../layouts/Layout.astro";
 
         </div>
 
+
+        <div>
+
+          <label
+            for="period"
+            class="mb-2 block
+                   text-xs font-bold uppercase
+                   tracking-[0.15em]
+                   text-[#c6ddd6]"
+          >
+            Période
+          </label>
+
+          <select
+            id="period"
+            class="w-full rounded-lg
+                   border border-[#4f8073]
+                   bg-[#11241f]
+                   px-4 py-3
+                   text-[#fff8f5]
+                   transition
+                   hover:border-[#7ee0c3]
+                   focus:border-[#7ee0c3]"
+          >
+            <option value="">
+              Toutes les périodes
+            </option>
+
+            <option value="2000-2003">
+              2000 — 2003
+            </option>
+
+            <option value="2004-2006">
+              2004 — 2006
+            </option>
+
+            <option value="2007-2010">
+              2007 — 2010
+            </option>
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label
+            for="price"
+            class="mb-2 block
+                   text-xs font-bold uppercase
+                   tracking-[0.15em]
+                   text-[#c6ddd6]"
+          >
+            Prix
+          </label>
+
+          <select
+            id="price"
+            class="w-full rounded-lg
+                   border border-[#4f8073]
+                   bg-[#11241f]
+                   px-4 py-3
+                   text-[#fff8f5]
+                   transition
+                   hover:border-[#7ee0c3]
+                   focus:border-[#7ee0c3]"
+          >
+            <option value="">
+              Tous les prix
+            </option>
+
+            <option value="under-50">
+              Moins de 50
+            </option>
+
+            <option value="50-100">
+              Entre 50 et 100
+            </option>
+
+            <option value="over-100">
+              Plus de 100
+            </option>
+          </select>
+
+        </div>
+
+
         <div
           class="border-l-0 border-[#35584f]
-                 md:border-l md:pl-8"
+                 lg:border-l lg:pl-8"
         >
 
           <p
@@ -115,7 +205,7 @@ import Layout from "../layouts/Layout.astro";
                    tracking-[0.15em]
                    text-[#c6ddd6]"
           >
-            Données affichées
+            Résultats
           </p>
 
           <p
@@ -131,6 +221,7 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
     </section>
+
 
     <section class="pt-12">
 
@@ -165,10 +256,11 @@ import Layout from "../layouts/Layout.astro";
                  leading-6 text-[#c6ddd6]"
         >
           Chaque courbe représente une entreprise.
-          Le graphique évolue selon la sélection.
+          Les trois filtres peuvent être combinés.
         </p>
 
       </div>
+
 
       <div
         class="overflow-hidden
@@ -190,6 +282,7 @@ import Layout from "../layouts/Layout.astro";
 
   </main>
 
+
   <script>
     import * as Plot from "@observablehq/plot";
     import stocksCsv from "../assets/stocks.csv?raw";
@@ -197,6 +290,16 @@ import Layout from "../layouts/Layout.astro";
     const selectSymbol =
       document.querySelector<HTMLSelectElement>(
         "#symbol"
+      );
+
+    const selectPeriod =
+      document.querySelector<HTMLSelectElement>(
+        "#period"
+      );
+
+    const selectPrice =
+      document.querySelector<HTMLSelectElement>(
+        "#price"
       );
 
     const div =
@@ -209,10 +312,12 @@ import Layout from "../layouts/Layout.astro";
         "#result-count"
       );
 
+
     const lines =
       stocksCsv
         .trim()
         .split(/\r?\n/);
+
 
     const stocks =
       lines
@@ -244,31 +349,120 @@ import Layout from "../layouts/Layout.astro";
             )
         );
 
+
+    function matchesPeriod(
+      year: number,
+      period: string
+    ) {
+
+      if (period === "") {
+        return true;
+      }
+
+      if (period === "2000-2003") {
+        return year >= 2000 && year <= 2003;
+      }
+
+      if (period === "2004-2006") {
+        return year >= 2004 && year <= 2006;
+      }
+
+      if (period === "2007-2010") {
+        return year >= 2007 && year <= 2010;
+      }
+
+      return true;
+    }
+
+
+    function matchesPrice(
+      price: number,
+      range: string
+    ) {
+
+      if (range === "") {
+        return true;
+      }
+
+      if (range === "under-50") {
+        return price < 50;
+      }
+
+      if (range === "50-100") {
+        return price >= 50 && price <= 100;
+      }
+
+      if (range === "over-100") {
+        return price > 100;
+      }
+
+      return true;
+    }
+
+
     function renderPlot() {
 
       if (
         !selectSymbol ||
+        !selectPeriod ||
+        !selectPrice ||
         !div
       ) {
         return;
       }
 
+
       const symbol =
         selectSymbol.value;
 
+      const period =
+        selectPeriod.value;
+
+      const priceRange =
+        selectPrice.value;
+
+
       const filteredStocks =
         stocks.filter(
-          (stock) =>
-            symbol === "" ||
-            stock.symbol === symbol
+          (stock) => {
+
+            const year =
+              stock.date.getFullYear();
+
+            const symbolMatches =
+              symbol === "" ||
+              stock.symbol === symbol;
+
+            const periodMatches =
+              matchesPeriod(
+                year,
+                period
+              );
+
+            const priceMatches =
+              matchesPrice(
+                stock.price,
+                priceRange
+              );
+
+            return (
+              symbolMatches &&
+              periodMatches &&
+              priceMatches
+            );
+
+          }
         );
+
 
       if (resultCount) {
         resultCount.innerText =
           filteredStocks.length.toString();
       }
 
+
       div.innerHTML = "";
+
 
       const width =
         Math.max(
@@ -278,6 +472,7 @@ import Layout from "../layouts/Layout.astro";
             div.clientWidth
           )
         );
+
 
       const plot =
         Plot.plot({
@@ -317,9 +512,27 @@ import Layout from "../layouts/Layout.astro";
             Plot.line(
               stocks,
               {
-                filter: (stock) =>
-                  symbol === "" ||
-                  stock.symbol === symbol,
+                filter: (stock) => {
+
+                  const year =
+                    stock.date.getFullYear();
+
+                  return (
+                    (
+                      symbol === "" ||
+                      stock.symbol === symbol
+                    ) &&
+                    matchesPeriod(
+                      year,
+                      period
+                    ) &&
+                    matchesPrice(
+                      stock.price,
+                      priceRange
+                    )
+                  );
+
+                },
 
                 x: "date",
 
@@ -331,12 +544,31 @@ import Layout from "../layouts/Layout.astro";
               }
             ),
 
+
             Plot.dot(
               stocks,
               {
-                filter: (stock) =>
-                  symbol === "" ||
-                  stock.symbol === symbol,
+                filter: (stock) => {
+
+                  const year =
+                    stock.date.getFullYear();
+
+                  return (
+                    (
+                      symbol === "" ||
+                      stock.symbol === symbol
+                    ) &&
+                    matchesPeriod(
+                      year,
+                      period
+                    ) &&
+                    matchesPrice(
+                      stock.price,
+                      priceRange
+                    )
+                  );
+
+                },
 
                 x: "date",
 
@@ -344,10 +576,15 @@ import Layout from "../layouts/Layout.astro";
 
                 fill: "symbol",
 
-                r: 2.5,
+                r: 3,
 
                 title: (stock) =>
-                  `${stock.symbol} · ${stock.price}`
+                  `${stock.symbol}
+${stock.date.toLocaleDateString("fr-FR", {
+                    month: "long",
+                    year: "numeric"
+                  })}
+${stock.price}`
               }
             )
 
@@ -355,13 +592,27 @@ import Layout from "../layouts/Layout.astro";
 
         });
 
+
       div.append(plot);
+
     }
+
 
     selectSymbol?.addEventListener(
       "change",
       renderPlot
     );
+
+    selectPeriod?.addEventListener(
+      "change",
+      renderPlot
+    );
+
+    selectPrice?.addEventListener(
+      "change",
+      renderPlot
+    );
+
 
     renderPlot();
   </script>
